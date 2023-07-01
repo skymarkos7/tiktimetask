@@ -264,8 +264,10 @@
       const start = parseTime(startTime);
       const end = parseTime(endTime);
       const duration = end - start;
-      return Math.floor(duration / 60);
+      const sgp = duration / 3600; // converter para horas
+      return sgp.toFixed(1);
     }
+
 
     function calculateTotal(startTime, endTime) {
       const start = parseTime(startTime);
