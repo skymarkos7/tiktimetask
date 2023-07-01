@@ -3,6 +3,11 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sortablejs@1.10.2/Sortable.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.10.2/Sortable.min.js"></script>
 </head>
+<div class="div-centralizada">
+  <input type="text" id="input-descricao" placeholder="Digite a descrição">
+  <button onclick="adicionarItem()">Adicionar</button>
+</div>
+<hr>
 <div class="container">
   <table id="sortable-table">
     <thead>
@@ -30,10 +35,7 @@
     </tbody>
   </table>
 </div>
-<div>
-  <input type="text" id="input-descricao" placeholder="Digite a descrição">
-  <button onclick="adicionarItem()">Adicionar</button>
-</div>
+
 <script>
   // Inicializar a tabela arrastável
   const sortableTable = Sortable.create(document.getElementById('sortable-table').getElementsByTagName('tbody')[0], {
@@ -83,4 +85,12 @@
   .drag-handle {
     cursor: move;
   }
+
+  .div-centralizada {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
 </style>
