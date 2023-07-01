@@ -111,10 +111,8 @@
         newRow.appendChild(acaoCell);
 
         const descricaoCell = document.createElement('td');
+        descricaoCell.contentEditable = true; // Adiciona a propriedade contentEditable para tornar a célula editável
         descricaoCell.textContent = descricao;
-        descricaoCell.ondblclick = function () {
-          editarDescricao(this);
-        };
         newRow.appendChild(descricaoCell);
 
         const tempoCell = document.createElement('td');
@@ -220,10 +218,6 @@
     }
 
     function editarDescricao(cell) {
-      if (cell.parentNode.rowIndex === 1) {
-        return; // Ignora a primeira linha
-      }
-
       const descricao = cell.textContent;
 
       const input = document.createElement('input');
