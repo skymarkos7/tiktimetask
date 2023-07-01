@@ -46,8 +46,6 @@
   </table>
 </div>
 
-
-
 <script>
   const sortableTable = Sortable.create(
     document.getElementById('sortable-table').getElementsByTagName('tbody')[0],
@@ -63,7 +61,7 @@
       const tabela = document.getElementById('table-body');
 
       const newRow = document.createElement('tr');
-      tabela.appendChild(newRow);
+      tabela.insertBefore(newRow, tabela.firstChild);
 
       const dragCell = document.createElement('td');
       dragCell.innerHTML = '&#9776;';
