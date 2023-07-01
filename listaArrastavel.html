@@ -188,6 +188,14 @@
       const totalLogCell = document.createElement('td');
       totalLogCell.textContent = total;
       timeLogRow.appendChild(totalLogCell);
+
+      // Altera o ícone para o ícone de play
+      icon.classList.remove('fa-pause');
+      icon.classList.remove('pause-icon');
+      icon.classList.add('fa-play', 'play-icon');
+      icon.onclick = function () {
+        startTimer(this);
+      };
     }
 
     function padZero(num) {
@@ -195,6 +203,10 @@
     }
 
     function editarDescricao(cell) {
+      if (cell.parentNode.rowIndex === 1) {
+        return; // Ignora a primeira linha
+      }
+
       const descricao = cell.textContent;
 
       const input = document.createElement('input');
