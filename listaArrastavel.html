@@ -13,7 +13,7 @@
 </head>
 <body>
   <div class="div-centralizada">
-    <input type="text" id="input-descricao" placeholder="Digite a descrição" />
+    <input type="text" id="input-descricao" placeholder="Digite a descrição" onkeydown="handleInputKeydown(event)" />
     <button class="margin" onclick="adicionarItem()">Adicionar</button>
   </div>
 
@@ -81,6 +81,13 @@
       }
     );
 
+    function handleInputKeydown(event) {
+      if (event.key === 'Enter') {
+        adicionarItem();
+        event.preventDefault();
+      }
+    }
+
     function adicionarItem() {
       const descricao = document.getElementById('input-descricao').value;
       if (descricao.trim() !== '') {
@@ -113,6 +120,8 @@
         const tempoCell = document.createElement('td');
         tempoCell.textContent = '00:00:00';
         newRow.appendChild(tempoCell);
+
+        document.getElementById('input-descricao').value = '';
       }
     }
 
