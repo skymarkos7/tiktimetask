@@ -61,6 +61,7 @@
       <thead>
         <tr>
           <th>Data</th>
+          <th>Descrição</th>
           <th>Início</th>
           <th>Fim</th>
           <th>SGP</th>
@@ -187,6 +188,10 @@
       const dateLogCell = document.createElement('td');
       dateLogCell.textContent = currentDate;
       timeLogRow.appendChild(dateLogCell);
+
+      const descricaoLogCell = document.createElement('td');
+      descricaoLogCell.textContent = row.cells[2].textContent;
+      timeLogRow.appendChild(descricaoLogCell);
 
       const startLogCell = document.createElement('td');
       startLogCell.textContent = currentStartTime;
