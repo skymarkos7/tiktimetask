@@ -1,0 +1,70 @@
+<head>
+  <!-- Outros elementos do cabeçalho -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sortablejs@1.10.2/Sortable.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.10.2/Sortable.min.js"></script>
+</head>
+
+<div class="container">
+  <table id="sortable-table">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Ação</th>
+        <th>Descrição</th>
+        <th>Tempo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="drag-handle">&#9776;</td>
+        <td>Ação 1</td>
+        <td>Descrição 1</td>
+        <td>00:20</td>
+      </tr>
+      <tr>
+        <td class="drag-handle">&#9776;</td>
+        <td>Ação 2</td>
+        <td>Descrição 2</td>
+        <td>00:15</td>
+      </tr>
+      <!-- Adicione mais linhas conforme necessário -->
+    </tbody>
+  </table>
+</div>
+
+
+<script>
+    // Inicializar a tabela arrastável
+const sortableTable = Sortable.create(document.getElementById('sortable-table').getElementsByTagName('tbody')[0], {
+  handle: '.drag-handle',
+  animation: 150
+});
+</script>
+
+
+
+<style>
+    .container {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.drag-handle {
+  cursor: move;
+}
+
+</style>
+
+
+
