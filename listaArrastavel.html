@@ -3,7 +3,6 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sortablejs@1.10.2/Sortable.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.10.2/Sortable.min.js"></script>
 </head>
-
 <div class="container">
   <table id="sortable-table">
     <thead>
@@ -31,40 +30,57 @@
     </tbody>
   </table>
 </div>
-
-
+<div>
+  <input type="text" id="input-descricao" placeholder="Digite a descrição">
+  <button onclick="adicionarItem()">Adicionar</button>
+</div>
 <script>
-    // Inicializar a tabela arrastável
-const sortableTable = Sortable.create(document.getElementById('sortable-table').getElementsByTagName('tbody')[0], {
-  handle: '.drag-handle',
-  animation: 150
-});
+  // Inicializar a tabela arrastável
+  const sortableTable = Sortable.create(document.getElementById('sortable-table').getElementsByTagName('tbody')[0], {
+    handle: '.drag-handle',
+    animation: 150
+  });
+
+  function adicionarItem() {
+    const descricao = document.getElementById('input-descricao').value;
+    if (descricao.trim() !== '') {
+      const tabela = document.getElementById('sortable-table').getElementsByTagName('tbody')[0];
+      const newRow = tabela.insertRow(tabela.rows.length);
+
+      const dragCell = newRow.insertCell(0);
+      dragCell.innerHTML = '&#9776;';
+      dragCell.className = 'drag-handle';
+
+      const acaoCell = newRow.insertCell(1);
+      acaoCell.innerHTML = 'Ação';
+
+      const descricaoCell = newRow.insertCell(2);
+      descricaoCell.innerHTML = descricao;
+
+      const tempoCell = newRow.insertCell(3);
+      tempoCell.innerHTML = '00:00';
+    }
+  }
 </script>
-
-
-
 <style>
-    .container {
-  max-width: 500px;
-  margin: 0 auto;
-}
+  .container {
+    max-width: 500px;
+    margin: 0 auto;
+  }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
 
-th, td {
-  padding: 8px;
-  border-bottom: 1px solid #ddd;
-  text-align: left;
-}
+  th,
+  td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+  }
 
-.drag-handle {
-  cursor: move;
-}
-
+  .drag-handle {
+    cursor: move;
+  }
 </style>
-
-
-
