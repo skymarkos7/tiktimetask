@@ -31,14 +31,18 @@
     <tbody id="table-body">
       <tr>
         <td class="drag-handle">&#9776;</td>
-        <td><i class="fa fa-play" onclick="startTimer(this)"></i></td>
-        <td>Descrição 1</td>
+        <td>
+          <i class="fa fa-play" onclick="startTimer(this)"></i>
+        </td>
+        <td onclick="editarDescricao(this)">Descrição 1</td>
         <td>00:00</td>
       </tr>
       <tr>
         <td class="drag-handle">&#9776;</td>
-        <td><i class="fa fa-play" onclick="startTimer(this)"></i></td>
-        <td>Descrição 2</td>
+        <td>
+          <i class="fa fa-play" onclick="startTimer(this)"></i>
+        </td>
+        <td onclick="editarDescricao(this)">Descrição 2</td>
         <td>00:00</td>
       </tr>
       <!-- Adicione mais linhas conforme necessário -->
@@ -79,6 +83,9 @@
 
       const descricaoCell = document.createElement('td');
       descricaoCell.textContent = descricao;
+      descricaoCell.onclick = function () {
+        editarDescricao(this);
+      };
       newRow.appendChild(descricaoCell);
 
       const tempoCell = document.createElement('td');
@@ -133,6 +140,28 @@
   function padZero(num) {
     return num.toString().padStart(2, '0');
   }
+
+  function editarDescricao(cell) {
+    const descricao = cell.textContent;
+
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = descricao;
+    input.classList.add('edit-input');
+
+    input.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter') {
+        cell.textContent = input.value;
+        input.parentNode.removeChild(input);
+      } else if (event.key === 'Escape') {
+        input.parentNode.removeChild(input);
+      }
+    });
+
+    cell.textContent = '';
+    cell.appendChild(input);
+    input.focus();
+  }
 </script>
 
 <style>
@@ -162,5 +191,9 @@
     justify-content: center;
     align-items: center;
     margin-top: 20px;
+  }
+
+  .edit-input {
+    width: 100%;
   }
 </style>
