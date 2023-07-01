@@ -32,7 +32,7 @@
       <tr>
         <td class="drag-handle">&#9776;</td>
         <td>
-          <i class="fa fa-play" onclick="startTimer(this)"></i>
+          <i class="fa fa-play play-icon" onclick="startTimer(this)"></i>
         </td>
         <td ondblclick="editarDescricao(this)">Descrição 1</td>
         <td>00:00</td>
@@ -40,7 +40,7 @@
       <tr>
         <td class="drag-handle">&#9776;</td>
         <td>
-          <i class="fa fa-play" onclick="startTimer(this)"></i>
+          <i class="fa fa-play play-icon" onclick="startTimer(this)"></i>
         </td>
         <td ondblclick="editarDescricao(this)">Descrição 2</td>
         <td>00:00</td>
@@ -74,7 +74,7 @@
 
       const acaoCell = document.createElement('td');
       const playIcon = document.createElement('i');
-      playIcon.classList.add('fa', 'fa-play');
+      playIcon.classList.add('fa', 'fa-play', 'play-icon');
       playIcon.onclick = function () {
         startTimer(this);
       };
@@ -117,7 +117,8 @@
 
     // Altera o ícone para o ícone de pausa
     icon.classList.remove('fa-play');
-    icon.classList.add('fa-pause');
+    icon.classList.remove('play-icon');
+    icon.classList.add('fa-pause', 'pause-icon');
     icon.onclick = function () {
       pauseTimer(this);
     };
@@ -131,7 +132,8 @@
 
     // Altera o ícone para o ícone de play
     icon.classList.remove('fa-pause');
-    icon.classList.add('fa-play');
+    icon.classList.remove('pause-icon');
+    icon.classList.add('fa-play', 'play-icon');
     icon.onclick = function () {
       startTimer(this);
     };
@@ -199,5 +201,13 @@
 
   .margin {
     margin: 10px;
+  }
+
+  .play-icon {
+    color: green;
+  }
+
+  .pause-icon {
+    color: red;
   }
 </style>
