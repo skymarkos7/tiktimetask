@@ -1,13 +1,16 @@
 <head>
   <!-- Outros elementos do cabeçalho -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sortablejs@1.10.2/Sortable.min.css">
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/sortablejs@1.10.2/Sortable.min.css"
+  />
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.10.2/Sortable.min.js"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"
+  />
 </head>
-<div class="div-centralizada">
-  <input type="text" id="input-descricao" placeholder="Digite a descrição">
-  <button onclick="adicionarItem()">Adicionar</button>
-</div>
-<hr>
+
 <div class="container">
   <table id="sortable-table">
     <thead>
@@ -18,52 +21,118 @@
         <th>Tempo</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody id="table-body">
       <tr>
         <td class="drag-handle">&#9776;</td>
-        <td>Ação 1</td>
+        <td><i class="fa fa-play" onclick="startTimer(this)"></i></td>
         <td>Descrição 1</td>
-        <td>00:20</td>
+        <td>00:00</td>
       </tr>
       <tr>
         <td class="drag-handle">&#9776;</td>
-        <td>Ação 2</td>
+        <td><i class="fa fa-play" onclick="startTimer(this)"></i></td>
         <td>Descrição 2</td>
-        <td>00:15</td>
+        <td>00:00</td>
       </tr>
       <!-- Adicione mais linhas conforme necessário -->
     </tbody>
   </table>
 </div>
 
+<div class="div-centralizada">
+  <input type="text" id="input-descricao" placeholder="Digite a descrição" />
+  <button onclick="adicionarItem()">Adicionar</button>
+</div>
+
 <script>
-  // Inicializar a tabela arrastável
-  const sortableTable = Sortable.create(document.getElementById('sortable-table').getElementsByTagName('tbody')[0], {
-    handle: '.drag-handle',
-    animation: 150
-  });
+  const sortableTable = Sortable.create(
+    document.getElementById('sortable-table').getElementsByTagName('tbody')[0],
+    {
+      handle: '.drag-handle',
+      animation: 150,
+    }
+  );
 
   function adicionarItem() {
     const descricao = document.getElementById('input-descricao').value;
     if (descricao.trim() !== '') {
-      const tabela = document.getElementById('sortable-table').getElementsByTagName('tbody')[0];
-      const newRow = tabela.insertRow(tabela.rows.length);
+      const tabela = document.getElementById('table-body');
 
-      const dragCell = newRow.insertCell(0);
+      const newRow = document.createElement('tr');
+      tabela.appendChild(newRow);
+
+      const dragCell = document.createElement('td');
       dragCell.innerHTML = '&#9776;';
       dragCell.className = 'drag-handle';
+      newRow.appendChild(dragCell);
 
-      const acaoCell = newRow.insertCell(1);
-      acaoCell.innerHTML = 'Ação';
+      const acaoCell = document.createElement('td');
+      const playIcon = document.createElement('i');
+      playIcon.classList.add('fa', 'fa-play');
+      playIcon.onclick = function () {
+        startTimer(this);
+      };
+      acaoCell.appendChild(playIcon);
+      newRow.appendChild(acaoCell);
 
-      const descricaoCell = newRow.insertCell(2);
-      descricaoCell.innerHTML = descricao;
+      const descricaoCell = document.createElement('td');
+      descricaoCell.textContent = descricao;
+      newRow.appendChild(descricaoCell);
 
-      const tempoCell = newRow.insertCell(3);
-      tempoCell.innerHTML = '00:00';
+      const tempoCell = document.createElement('td');
+      tempoCell.textContent = '00:00';
+      newRow.appendChild(tempoCell);
     }
   }
+
+  function startTimer(icon) {
+    const row = icon.parentNode.parentNode;
+    const tempoCell = row.cells[3];
+    let tempo = tempoCell.innerText;
+    let [minutes, seconds] = tempo.split(':');
+    minutes = parseInt(minutes);
+    seconds = parseInt(seconds);
+
+    const intervalId = setInterval(() => {
+      seconds++;
+      if (seconds === 60) {
+        seconds = 0;
+        minutes++;
+      }
+      tempo = `${padZero(minutes)}:${padZero(seconds)}`;
+      tempoCell.innerText = tempo;
+    }, 1000);
+
+    // Armazena o intervalId para poder parar o contador posteriormente
+    row.dataset.intervalId = intervalId.toString();
+
+    // Altera o ícone para o ícone de pausa
+    icon.classList.remove('fa-play');
+    icon.classList.add('fa-pause');
+    icon.onclick = function () {
+      pauseTimer(this);
+    };
+  }
+
+  function pauseTimer(icon) {
+    const row = icon.parentNode.parentNode;
+    const intervalId = parseInt(row.dataset.intervalId);
+
+    clearInterval(intervalId);
+
+    // Altera o ícone para o ícone de play
+    icon.classList.remove('fa-pause');
+    icon.classList.add('fa-play');
+    icon.onclick = function () {
+      startTimer(this);
+    };
+  }
+
+  function padZero(num) {
+    return num.toString().padStart(2, '0');
+  }
 </script>
+
 <style>
   .container {
     max-width: 500px;
@@ -87,10 +156,9 @@
   }
 
   .div-centralizada {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
 </style>
