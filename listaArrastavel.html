@@ -34,7 +34,7 @@
         <td>
           <i class="fa fa-play" onclick="startTimer(this)"></i>
         </td>
-        <td onclick="editarDescricao(this)">Descrição 1</td>
+        <td ondblclick="editarDescricao(this)">Descrição 1</td>
         <td>00:00</td>
       </tr>
       <tr>
@@ -42,7 +42,7 @@
         <td>
           <i class="fa fa-play" onclick="startTimer(this)"></i>
         </td>
-        <td onclick="editarDescricao(this)">Descrição 2</td>
+        <td ondblclick="editarDescricao(this)">Descrição 2</td>
         <td>00:00</td>
       </tr>
       <!-- Adicione mais linhas conforme necessário -->
@@ -83,7 +83,7 @@
 
       const descricaoCell = document.createElement('td');
       descricaoCell.textContent = descricao;
-      descricaoCell.onclick = function () {
+      descricaoCell.ondblclick = function () {
         editarDescricao(this);
       };
       newRow.appendChild(descricaoCell);
