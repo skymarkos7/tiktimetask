@@ -133,6 +133,10 @@
       // Armazena o intervalId para poder parar o contador posteriormente
       row.dataset.intervalId = intervalId.toString();
 
+      // Armazena a data e a hora de início
+      row.dataset.startDate = getCurrentDate();
+      row.dataset.startTime = getCurrentTime();
+
       // Altera o ícone para o ícone de pausa
       icon.classList.remove('fa-play');
       icon.classList.remove('play-icon');
@@ -140,32 +144,6 @@
       icon.onclick = function () {
         pauseTimer(this);
       };
-
-      // Adicionar log de tempo quando iniciar
-      const currentDate = getCurrentDate();
-      const currentStartTime = getCurrentTime();
-      const newLogRow = document.createElement('tr');
-      document.getElementById('time-log-body').appendChild(newLogRow);
-
-      const dateLogCell = document.createElement('td');
-      dateLogCell.textContent = currentDate;
-      newLogRow.appendChild(dateLogCell);
-
-      const startLogCell = document.createElement('td');
-      startLogCell.textContent = currentStartTime;
-      newLogRow.appendChild(startLogCell);
-
-      const endLogCell = document.createElement('td');
-      endLogCell.textContent = '';
-      newLogRow.appendChild(endLogCell);
-
-      const sgpLogCell = document.createElement('td');
-      sgpLogCell.textContent = '';
-      newLogRow.appendChild(sgpLogCell);
-
-      const totalLogCell = document.createElement('td');
-      totalLogCell.textContent = '';
-      newLogRow.appendChild(totalLogCell);
     }
 
     function pauseTimer(icon) {
@@ -174,29 +152,42 @@
 
       clearInterval(intervalId);
 
-      // Altera o ícone para o ícone de play
-      icon.classList.remove('fa-pause');
-      icon.classList.remove('pause-icon');
-      icon.classList.add('fa-play', 'play-icon');
-      icon.onclick = function () {
-        startTimer(this);
-      };
+      // Armazena a hora de fim
+      row.dataset.endTime = getCurrentTime();
 
       // Preencher o horário de fim e calcular SGP e Total
-      const endTime = getCurrentTime();
+      const startTime = row.dataset.startTime;
+      const endTime = row.dataset.endTime;
       row.cells[2].textContent = endTime;
 
-      const startTime = row.cells[1].textContent;
       const sgp = calculateSGP(startTime, endTime);
       const total = calculateTotal(startTime, endTime);
 
-      const timeLogRow = row.cloneNode(true);
-      timeLogRow.cells[1].textContent = startTime;
-      timeLogRow.cells[2].textContent = endTime;
-      timeLogRow.cells[3].textContent = sgp;
-      timeLogRow.cells[4].textContent = total;
+      const currentDate = getCurrentDate();
+      const currentStartTime = getCurrentTime();
 
+      const timeLogRow = document.createElement('tr');
       document.getElementById('time-log-body').appendChild(timeLogRow);
+
+      const dateLogCell = document.createElement('td');
+      dateLogCell.textContent = currentDate;
+      timeLogRow.appendChild(dateLogCell);
+
+      const startLogCell = document.createElement('td');
+      startLogCell.textContent = currentStartTime;
+      timeLogRow.appendChild(startLogCell);
+
+      const endLogCell = document.createElement('td');
+      endLogCell.textContent = endTime;
+      timeLogRow.appendChild(endLogCell);
+
+      const sgpLogCell = document.createElement('td');
+      sgpLogCell.textContent = sgp;
+      timeLogRow.appendChild(sgpLogCell);
+
+      const totalLogCell = document.createElement('td');
+      totalLogCell.textContent = total;
+      timeLogRow.appendChild(totalLogCell);
     }
 
     function padZero(num) {
