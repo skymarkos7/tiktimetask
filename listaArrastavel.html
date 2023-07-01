@@ -36,7 +36,7 @@
             <i class="fa fa-play play-icon" onclick="startTimer(this)"></i>
           </td>
           <td ondblclick="editarDescricao(this)">Descrição 1</td>
-          <td>00:00</td>
+          <td>00:00:00</td>
         </tr>
         <tr>
           <td class="drag-handle">&#9776;</td>
@@ -44,7 +44,7 @@
             <i class="fa fa-play play-icon" onclick="startTimer(this)"></i>
           </td>
           <td ondblclick="editarDescricao(this)">Descrição 2</td>
-          <td>00:00</td>
+          <td>00:00:00</td>
         </tr>
       </tbody>
     </table>
@@ -111,7 +111,7 @@
         newRow.appendChild(descricaoCell);
 
         const tempoCell = document.createElement('td');
-        tempoCell.textContent = '00:00';
+        tempoCell.textContent = '00:00:00';
         newRow.appendChild(tempoCell);
       }
     }
@@ -120,7 +120,8 @@
       const row = icon.parentNode.parentNode;
       const tempoCell = row.cells[3];
       let tempo = tempoCell.innerText;
-      let [minutes, seconds] = tempo.split(':');
+      let [hours, minutes, seconds] = tempo.split(':');
+      hours = parseInt(hours);
       minutes = parseInt(minutes);
       seconds = parseInt(seconds);
 
@@ -129,8 +130,12 @@
         if (seconds === 60) {
           seconds = 0;
           minutes++;
+          if (minutes === 60) {
+            minutes = 0;
+            hours++;
+          }
         }
-        tempo = `${padZero(minutes)}:${padZero(seconds)}`;
+        tempo = `${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)}`;
         tempoCell.innerText = tempo;
       }, 1000);
 
@@ -150,56 +155,56 @@
       };
     }
 
-  function pauseTimer(icon) {
-  const row = icon.parentNode.parentNode;
-  const intervalId = parseInt(row.dataset.intervalId);
+    function pauseTimer(icon) {
+      const row = icon.parentNode.parentNode;
+      const intervalId = parseInt(row.dataset.intervalId);
 
-  clearInterval(intervalId);
+      clearInterval(intervalId);
 
-  // Armazena a hora de fim
-  row.dataset.endTime = getCurrentTime();
+      // Armazena a hora de fim
+      row.dataset.endTime = getCurrentTime();
 
-  // Preencher o horário de fim e calcular SGP e Total
-  const startTime = row.dataset.startTime;
-  const endTime = row.dataset.endTime;
+      // Preencher o horário de fim e calcular SGP e Total
+      const startTime = row.dataset.startTime;
+      const endTime = row.dataset.endTime;
 
-  const sgp = calculateSGP(startTime, endTime);
-  const total = calculateTotal(startTime, endTime);
+      const sgp = calculateSGP(startTime, endTime);
+      const total = calculateTotal(startTime, endTime);
 
-  const currentDate = getCurrentDate();
-  const currentStartTime = getCurrentTime();
+      const currentDate = getCurrentDate();
+      const currentStartTime = getCurrentTime();
 
-  const timeLogRow = document.createElement('tr');
-  document.getElementById('time-log-body').appendChild(timeLogRow);
+      const timeLogRow = document.createElement('tr');
+      document.getElementById('time-log-body').appendChild(timeLogRow);
 
-  const dateLogCell = document.createElement('td');
-  dateLogCell.textContent = currentDate;
-  timeLogRow.appendChild(dateLogCell);
+      const dateLogCell = document.createElement('td');
+      dateLogCell.textContent = currentDate;
+      timeLogRow.appendChild(dateLogCell);
 
-  const startLogCell = document.createElement('td');
-  startLogCell.textContent = currentStartTime;
-  timeLogRow.appendChild(startLogCell);
+      const startLogCell = document.createElement('td');
+      startLogCell.textContent = currentStartTime;
+      timeLogRow.appendChild(startLogCell);
 
-  const endLogCell = document.createElement('td');
-  endLogCell.textContent = endTime;
-  timeLogRow.appendChild(endLogCell);
+      const endLogCell = document.createElement('td');
+      endLogCell.textContent = endTime;
+      timeLogRow.appendChild(endLogCell);
 
-  const sgpLogCell = document.createElement('td');
-  sgpLogCell.textContent = sgp;
-  timeLogRow.appendChild(sgpLogCell);
+      const sgpLogCell = document.createElement('td');
+      sgpLogCell.textContent = sgp;
+      timeLogRow.appendChild(sgpLogCell);
 
-  const totalLogCell = document.createElement('td');
-  totalLogCell.textContent = total;
-  timeLogRow.appendChild(totalLogCell);
+      const totalLogCell = document.createElement('td');
+      totalLogCell.textContent = total;
+      timeLogRow.appendChild(totalLogCell);
 
-  // Altera o ícone para o ícone de play
-  icon.classList.remove('fa-pause');
-  icon.classList.remove('pause-icon');
-  icon.classList.add('fa-play', 'play-icon');
-  icon.onclick = function () {
-    startTimer(this);
-  };
-}
+      // Altera o ícone para o ícone de play
+      icon.classList.remove('fa-pause');
+      icon.classList.remove('pause-icon');
+      icon.classList.add('fa-play', 'play-icon');
+      icon.onclick = function () {
+        startTimer(this);
+      };
+    }
 
     function padZero(num) {
       return num.toString().padStart(2, '0');
@@ -258,9 +263,10 @@
       const start = parseTime(startTime);
       const end = parseTime(endTime);
       const duration = end - start;
-      const minutes = Math.floor(duration / 60);
+      const hours = Math.floor(duration / 3600);
+      const minutes = Math.floor((duration % 3600) / 60);
       const seconds = duration % 60;
-      return `${padZero(minutes)}:${padZero(seconds)}`;
+      return `${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)}`;
     }
 
     function parseTime(time) {
