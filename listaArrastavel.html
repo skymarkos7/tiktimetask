@@ -77,40 +77,49 @@
       }
     );
 
-    function adicionarItem() {
-      const descricao = document.getElementById('input-descricao').value;
-      if (descricao.trim() !== '') {
-        const tabela = document.getElementById('table-body');
+   function adicionarItem() {
+  const descricao = document.getElementById('input-descricao').value;
+  if (descricao.trim() !== '') {
+    const tabela = document.getElementById('table-body');
 
-        const newRow = document.createElement('tr');
-        tabela.insertBefore(newRow, tabela.firstChild);
+    const newRow = document.createElement('tr');
+    tabela.insertBefore(newRow, tabela.firstChild);
 
-        const dragCell = document.createElement('td');
-        dragCell.innerHTML = '&#9776;';
-        dragCell.className = 'drag-handle';
-        newRow.appendChild(dragCell);
+    const dragCell = document.createElement('td');
+    dragCell.innerHTML = '&#9776;';
+    dragCell.className = 'drag-handle';
+    newRow.appendChild(dragCell);
 
-        const acaoCell = document.createElement('td');
-        const playIcon = document.createElement('i');
-        playIcon.classList.add('fa', 'fa-play', 'play-icon');
-        playIcon.onclick = function () {
-          startTimer(this);
-        };
-        acaoCell.appendChild(playIcon);
-        newRow.appendChild(acaoCell);
+    const acaoCell = document.createElement('td');
+    const playIcon = document.createElement('i');
+    playIcon.classList.add('fa', 'fa-play', 'play-icon');
+    playIcon.onclick = function () {
+      startTimer(this);
+    };
+    acaoCell.appendChild(playIcon);
+    newRow.appendChild(acaoCell);
 
-        const descricaoCell = document.createElement('td');
-        descricaoCell.textContent = descricao;
-        descricaoCell.ondblclick = function () {
-          editarDescricao(this);
-        };
-        newRow.appendChild(descricaoCell);
+    const descricaoCell = document.createElement('td');
+    descricaoCell.textContent = descricao;
+    descricaoCell.ondblclick = function () {
+      editarDescricao(this);
+    };
+    newRow.appendChild(descricaoCell);
 
-        const tempoCell = document.createElement('td');
-        tempoCell.textContent = '00:00';
-        newRow.appendChild(tempoCell);
-      }
-    }
+    const tempoCell = document.createElement('td');
+    tempoCell.textContent = '00:00';
+    newRow.appendChild(tempoCell);
+
+    document.getElementById('input-descricao').value = ''; // Limpa o campo de entrada após adicionar o item
+  }
+}
+
+document.getElementById('input-descricao').addEventListener('keydown', function (event) {
+  if (event.key === 'Enter') {
+    adicionarItem();
+  }
+});
+
 
     function startTimer(icon) {
       const row = icon.parentNode.parentNode;
