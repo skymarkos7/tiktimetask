@@ -11,6 +11,13 @@
   />
 </head>
 
+<div class="div-centralizada">
+  <input type="text" id="input-descricao" placeholder="Digite a descrição" />
+  <button onclick="adicionarItem()">Adicionar</button>
+</div>
+
+<hr>
+
 <div class="container">
   <table id="sortable-table">
     <thead>
@@ -39,10 +46,7 @@
   </table>
 </div>
 
-<div class="div-centralizada">
-  <input type="text" id="input-descricao" placeholder="Digite a descrição" />
-  <button onclick="adicionarItem()">Adicionar</button>
-</div>
+
 
 <script>
   const sortableTable = Sortable.create(
