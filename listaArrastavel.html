@@ -1,5 +1,6 @@
+<!DOCTYPE html>
+<html>
 <head>
-  <!-- Outros elementos do cabeçalho -->
   <link
     rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/sortablejs@1.10.2/Sortable.min.css"
@@ -10,208 +11,302 @@
     href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"
   />
 </head>
+<body>
+  <div class="div-centralizada">
+    <input type="text" id="input-descricao" placeholder="Digite a descrição" />
+    <button class="margin" onclick="adicionarItem()">Adicionar</button>
+  </div>
 
-<div class="div-centralizada">
-  <input type="text" id="input-descricao" placeholder="Digite a descrição" />
-  <button class="margin" onclick="adicionarItem()">Adicionar</button>
-</div>
+  <hr class="margin">
 
-<hr class="margin">
+  <div class="container">
+    <table id="sortable-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Ação</th>
+          <th>Descrição</th>
+          <th>Tempo</th>
+        </tr>
+      </thead>
+      <tbody id="table-body">
+        <tr>
+          <td class="drag-handle">&#9776;</td>
+          <td>
+            <i class="fa fa-play play-icon" onclick="startTimer(this)"></i>
+          </td>
+          <td ondblclick="editarDescricao(this)">Descrição 1</td>
+          <td>00:00</td>
+        </tr>
+        <tr>
+          <td class="drag-handle">&#9776;</td>
+          <td>
+            <i class="fa fa-play play-icon" onclick="startTimer(this)"></i>
+          </td>
+          <td ondblclick="editarDescricao(this)">Descrição 2</td>
+          <td>00:00</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-<div class="container">
-  <table id="sortable-table">
-    <thead>
-      <tr>
-        <th></th>
-        <th>Ação</th>
-        <th>Descrição</th>
-        <th>Tempo</th>
-      </tr>
-    </thead>
-    <tbody id="table-body">
-      <tr>
-        <td class="drag-handle">&#9776;</td>
-        <td>
-          <i class="fa fa-play play-icon" onclick="startTimer(this)"></i>
-        </td>
-        <td ondblclick="editarDescricao(this)">Descrição 1</td>
-        <td>00:00</td>
-      </tr>
-      <tr>
-        <td class="drag-handle">&#9776;</td>
-        <td>
-          <i class="fa fa-play play-icon" onclick="startTimer(this)"></i>
-        </td>
-        <td ondblclick="editarDescricao(this)">Descrição 2</td>
-        <td>00:00</td>
-      </tr>
-      <!-- Adicione mais linhas conforme necessário -->
-    </tbody>
-  </table>
-</div>
+  <hr class="margin">
 
-<hr class="margin">
+  <div class="container">
+    <table id="time-log-table">
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Início</th>
+          <th>Fim</th>
+          <th>SGP</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody id="time-log-body">
+      </tbody>
+    </table>
+  </div>
 
+  <script>
+    const sortableTable = Sortable.create(
+      document.getElementById('sortable-table').getElementsByTagName('tbody')[0],
+      {
+        handle: '.drag-handle',
+        animation: 150,
+      }
+    );
 
+    function adicionarItem() {
+      const descricao = document.getElementById('input-descricao').value;
+      if (descricao.trim() !== '') {
+        const tabela = document.getElementById('table-body');
 
-<script>
-  const sortableTable = Sortable.create(
-    document.getElementById('sortable-table').getElementsByTagName('tbody')[0],
-    {
-      handle: '.drag-handle',
-      animation: 150,
+        const newRow = document.createElement('tr');
+        tabela.insertBefore(newRow, tabela.firstChild);
+
+        const dragCell = document.createElement('td');
+        dragCell.innerHTML = '&#9776;';
+        dragCell.className = 'drag-handle';
+        newRow.appendChild(dragCell);
+
+        const acaoCell = document.createElement('td');
+        const playIcon = document.createElement('i');
+        playIcon.classList.add('fa', 'fa-play', 'play-icon');
+        playIcon.onclick = function () {
+          startTimer(this);
+        };
+        acaoCell.appendChild(playIcon);
+        newRow.appendChild(acaoCell);
+
+        const descricaoCell = document.createElement('td');
+        descricaoCell.textContent = descricao;
+        descricaoCell.ondblclick = function () {
+          editarDescricao(this);
+        };
+        newRow.appendChild(descricaoCell);
+
+        const tempoCell = document.createElement('td');
+        tempoCell.textContent = '00:00';
+        newRow.appendChild(tempoCell);
+      }
     }
-  );
 
-  function adicionarItem() {
-    const descricao = document.getElementById('input-descricao').value;
-    if (descricao.trim() !== '') {
-      const tabela = document.getElementById('table-body');
+    function startTimer(icon) {
+      const row = icon.parentNode.parentNode;
+      const tempoCell = row.cells[3];
+      let tempo = tempoCell.innerText;
+      let [minutes, seconds] = tempo.split(':');
+      minutes = parseInt(minutes);
+      seconds = parseInt(seconds);
 
-      const newRow = document.createElement('tr');
-      tabela.insertBefore(newRow, tabela.firstChild);
+      const intervalId = setInterval(() => {
+        seconds++;
+        if (seconds === 60) {
+          seconds = 0;
+          minutes++;
+        }
+        tempo = `${padZero(minutes)}:${padZero(seconds)}`;
+        tempoCell.innerText = tempo;
+      }, 1000);
 
-      const dragCell = document.createElement('td');
-      dragCell.innerHTML = '&#9776;';
-      dragCell.className = 'drag-handle';
-      newRow.appendChild(dragCell);
+      // Armazena o intervalId para poder parar o contador posteriormente
+      row.dataset.intervalId = intervalId.toString();
 
-      const acaoCell = document.createElement('td');
-      const playIcon = document.createElement('i');
-      playIcon.classList.add('fa', 'fa-play', 'play-icon');
-      playIcon.onclick = function () {
+      // Altera o ícone para o ícone de pausa
+      icon.classList.remove('fa-play');
+      icon.classList.remove('play-icon');
+      icon.classList.add('fa-pause', 'pause-icon');
+      icon.onclick = function () {
+        pauseTimer(this);
+      };
+
+      // Adicionar log de tempo quando iniciar
+      const currentDate = getCurrentDate();
+      const currentStartTime = getCurrentTime();
+      const newLogRow = document.createElement('tr');
+      document.getElementById('time-log-body').appendChild(newLogRow);
+
+      const dateLogCell = document.createElement('td');
+      dateLogCell.textContent = currentDate;
+      newLogRow.appendChild(dateLogCell);
+
+      const startLogCell = document.createElement('td');
+      startLogCell.textContent = currentStartTime;
+      newLogRow.appendChild(startLogCell);
+
+      const endLogCell = document.createElement('td');
+      endLogCell.textContent = '';
+      newLogRow.appendChild(endLogCell);
+
+      const sgpLogCell = document.createElement('td');
+      sgpLogCell.textContent = '';
+      newLogRow.appendChild(sgpLogCell);
+
+      const totalLogCell = document.createElement('td');
+      totalLogCell.textContent = '';
+      newLogRow.appendChild(totalLogCell);
+    }
+
+    function pauseTimer(icon) {
+      const row = icon.parentNode.parentNode;
+      const intervalId = parseInt(row.dataset.intervalId);
+
+      clearInterval(intervalId);
+
+      // Altera o ícone para o ícone de play
+      icon.classList.remove('fa-pause');
+      icon.classList.remove('pause-icon');
+      icon.classList.add('fa-play', 'play-icon');
+      icon.onclick = function () {
         startTimer(this);
       };
-      acaoCell.appendChild(playIcon);
-      newRow.appendChild(acaoCell);
 
-      const descricaoCell = document.createElement('td');
-      descricaoCell.textContent = descricao;
-      descricaoCell.ondblclick = function () {
-        editarDescricao(this);
-      };
-      newRow.appendChild(descricaoCell);
+      // Preencher o horário de fim e calcular SGP e Total
+      const endTime = getCurrentTime();
+      row.cells[2].textContent = endTime;
 
-      const tempoCell = document.createElement('td');
-      tempoCell.textContent = '00:00';
-      newRow.appendChild(tempoCell);
+      const startTime = row.cells[1].textContent;
+      const sgp = calculateSGP(startTime, endTime);
+      const total = calculateTotal(startTime, endTime);
+
+      const timeLogRow = row.cloneNode(true);
+      timeLogRow.cells[1].textContent = startTime;
+      timeLogRow.cells[2].textContent = endTime;
+      timeLogRow.cells[3].textContent = sgp;
+      timeLogRow.cells[4].textContent = total;
+
+      document.getElementById('time-log-body').appendChild(timeLogRow);
     }
-  }
 
-  function startTimer(icon) {
-    const row = icon.parentNode.parentNode;
-    const tempoCell = row.cells[3];
-    let tempo = tempoCell.innerText;
-    let [minutes, seconds] = tempo.split(':');
-    minutes = parseInt(minutes);
-    seconds = parseInt(seconds);
+    function padZero(num) {
+      return num.toString().padStart(2, '0');
+    }
 
-    const intervalId = setInterval(() => {
-      seconds++;
-      if (seconds === 60) {
-        seconds = 0;
-        minutes++;
-      }
-      tempo = `${padZero(minutes)}:${padZero(seconds)}`;
-      tempoCell.innerText = tempo;
-    }, 1000);
+    function editarDescricao(cell) {
+      const descricao = cell.textContent;
 
-    // Armazena o intervalId para poder parar o contador posteriormente
-    row.dataset.intervalId = intervalId.toString();
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = descricao;
+      input.classList.add('edit-input');
 
-    // Altera o ícone para o ícone de pausa
-    icon.classList.remove('fa-play');
-    icon.classList.remove('play-icon');
-    icon.classList.add('fa-pause', 'pause-icon');
-    icon.onclick = function () {
-      pauseTimer(this);
-    };
-  }
+      input.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+          cell.textContent = input.value;
+          input.parentNode.removeChild(input);
+        } else if (event.key === 'Escape') {
+          input.parentNode.removeChild(input);
+        }
+      });
 
-  function pauseTimer(icon) {
-    const row = icon.parentNode.parentNode;
-    const intervalId = parseInt(row.dataset.intervalId);
+      cell.textContent = '';
+      cell.appendChild(input);
+      input.focus();
+    }
 
-    clearInterval(intervalId);
+    function getCurrentDate() {
+      const date = new Date();
+      const year = date.getFullYear();
+      const month = padZero(date.getMonth() + 1);
+      const day = padZero(date.getDate());
+      return `${year}-${month}-${day}`;
+    }
 
-    // Altera o ícone para o ícone de play
-    icon.classList.remove('fa-pause');
-    icon.classList.remove('pause-icon');
-    icon.classList.add('fa-play', 'play-icon');
-    icon.onclick = function () {
-      startTimer(this);
-    };
-  }
+    function getCurrentTime() {
+      const date = new Date();
+      const hours = padZero(date.getHours());
+      const minutes = padZero(date.getMinutes());
+      const seconds = padZero(date.getSeconds());
+      return `${hours}:${minutes}:${seconds}`;
+    }
 
-  function padZero(num) {
-    return num.toString().padStart(2, '0');
-  }
+    function calculateSGP(startTime, endTime) {
+      const start = parseTime(startTime);
+      const end = parseTime(endTime);
+      const duration = end - start;
+      return Math.floor(duration / 60);
+    }
 
-  function editarDescricao(cell) {
-    const descricao = cell.textContent;
+    function calculateTotal(startTime, endTime) {
+      const start = parseTime(startTime);
+      const end = parseTime(endTime);
+      const duration = end - start;
+      const minutes = Math.floor(duration / 60);
+      const seconds = duration % 60;
+      return `${padZero(minutes)}:${padZero(seconds)}`;
+    }
 
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.value = descricao;
-    input.classList.add('edit-input');
+    function parseTime(time) {
+      const [hours, minutes, seconds] = time.split(':');
+      return parseInt(hours) * 3600 + parseInt(minutes) * 60 + parseInt(seconds);
+    }
+  </script>
 
-    input.addEventListener('keydown', function (event) {
-      if (event.key === 'Enter') {
-        cell.textContent = input.value;
-        input.parentNode.removeChild(input);
-      } else if (event.key === 'Escape') {
-        input.parentNode.removeChild(input);
-      }
-    });
+  <style>
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+    }
 
-    cell.textContent = '';
-    cell.appendChild(input);
-    input.focus();
-  }
-</script>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
 
-<style>
-  .container {
-    max-width: 500px;
-    margin: 0 auto;
-  }
+    th,
+    td {
+      padding: 8px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
+    .drag-handle {
+      cursor: move;
+    }
 
-  th,
-  td {
-    padding: 8px;
-    border-bottom: 1px solid #ddd;
-    text-align: left;
-  }
+    .div-centralizada {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+    }
 
-  .drag-handle {
-    cursor: move;
-  }
+    .edit-input {
+      width: 100%;
+    }
 
-  .div-centralizada {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-  }
+    .margin {
+      margin: 10px;
+    }
 
-  .edit-input {
-    width: 100%;
-  }
+    .play-icon {
+      color: green;
+    }
 
-  .margin {
-    margin: 10px;
-  }
-
-  .play-icon {
-    color: green;
-  }
-
-  .pause-icon {
-    color: red;
-  }
-</style>
+    .pause-icon {
+      color: red;
+    }
+  </style>
+</body>
+</html>
