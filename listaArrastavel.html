@@ -2,12 +2,9 @@
   <!-- Outros elementos do cabeçalho -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sortablejs@1.10.2/Sortable.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.10.2/Sortable.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
 </head>
-<div class="div-centralizada">
-  <input type="text" id="input-descricao" placeholder="Digite a descrição">
-  <button onclick="adicionarItem()">Adicionar</button>
-</div>
-<hr>
+
 <div class="container">
   <table id="sortable-table">
     <thead>
@@ -21,15 +18,15 @@
     <tbody>
       <tr>
         <td class="drag-handle">&#9776;</td>
-        <td>Ação 1</td>
+        <td><i class="fa fa-play" onclick="startTimer(this)"></i></td>
         <td>Descrição 1</td>
-        <td>00:20</td>
+        <td>00:00</td>
       </tr>
       <tr>
         <td class="drag-handle">&#9776;</td>
-        <td>Ação 2</td>
+        <td><i class="fa fa-play" onclick="startTimer(this)"></i></td>
         <td>Descrição 2</td>
-        <td>00:15</td>
+        <td>00:00</td>
       </tr>
       <!-- Adicione mais linhas conforme necessário -->
     </tbody>
@@ -37,33 +34,59 @@
 </div>
 
 <script>
-  // Inicializar a tabela arrastável
   const sortableTable = Sortable.create(document.getElementById('sortable-table').getElementsByTagName('tbody')[0], {
     handle: '.drag-handle',
     animation: 150
   });
 
-  function adicionarItem() {
-    const descricao = document.getElementById('input-descricao').value;
-    if (descricao.trim() !== '') {
-      const tabela = document.getElementById('sortable-table').getElementsByTagName('tbody')[0];
-      const newRow = tabela.insertRow(tabela.rows.length);
+  function startTimer(icon) {
+    const row = icon.parentNode.parentNode;
+    const tempoCell = row.cells[3];
+    let tempo = tempoCell.innerText;
+    let [minutes, seconds] = tempo.split(':');
+    minutes = parseInt(minutes);
+    seconds = parseInt(seconds);
 
-      const dragCell = newRow.insertCell(0);
-      dragCell.innerHTML = '&#9776;';
-      dragCell.className = 'drag-handle';
+    const intervalId = setInterval(() => {
+      seconds++;
+      if (seconds === 60) {
+        seconds = 0;
+        minutes++;
+      }
+      tempo = `${padZero(minutes)}:${padZero(seconds)}`;
+      tempoCell.innerText = tempo;
+    }, 1000);
 
-      const acaoCell = newRow.insertCell(1);
-      acaoCell.innerHTML = 'Ação';
+    // Armazena o intervalId para poder parar o contador posteriormente
+    row.dataset.intervalId = intervalId.toString();
 
-      const descricaoCell = newRow.insertCell(2);
-      descricaoCell.innerHTML = descricao;
+    // Altera o ícone para o ícone de pausa
+    icon.classList.remove('fa-play');
+    icon.classList.add('fa-pause');
+    icon.onclick = function() {
+      pauseTimer(this);
+    };
+  }
 
-      const tempoCell = newRow.insertCell(3);
-      tempoCell.innerHTML = '00:00';
-    }
+  function pauseTimer(icon) {
+    const row = icon.parentNode.parentNode;
+    const intervalId = parseInt(row.dataset.intervalId);
+
+    clearInterval(intervalId);
+
+    // Altera o ícone para o ícone de play
+    icon.classList.remove('fa-pause');
+    icon.classList.add('fa-play');
+    icon.onclick = function() {
+      startTimer(this);
+    };
+  }
+
+  function padZero(num) {
+    return num.toString().padStart(2, '0');
   }
 </script>
+
 <style>
   .container {
     max-width: 500px;
@@ -85,12 +108,4 @@
   .drag-handle {
     cursor: move;
   }
-
-  .div-centralizada {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-
 </style>
