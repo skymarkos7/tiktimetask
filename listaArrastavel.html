@@ -309,6 +309,35 @@
     darkModeButton.style.right = "10px";
     darkModeButton.style.zIndex = "9999";
     document.body.appendChild(darkModeButton);
+    
+    
+    
+  //------------------------------
+  
+  function highlightMatchingItems() {
+  const tableBody = document.getElementById('table-body');
+  const timeLogBody = document.getElementById('time-log-body');
+  const descricaoClicada = event.target.parentNode.querySelector('td:nth-child(3)').textContent;
+
+  for (let i = 0; i < timeLogBody.rows.length; i++) {
+    const descricaoCell = timeLogBody.rows[i].querySelector('td:nth-child(2)');
+    const descricao = descricaoCell.textContent;
+
+    if (descricao === descricaoClicada) {
+      timeLogBody.rows[i].style.backgroundColor = 'gray';
+    } else {
+      timeLogBody.rows[i].style.backgroundColor = '';
+    }
+  }
+}
+
+document.addEventListener('click', function (event) {
+  if (event.target.matches('#table-body td:nth-child(4)')) {
+    highlightMatchingItems();
+  }
+});
+
+
 
     </script>
 
@@ -374,6 +403,12 @@
     .dark-mode .pause-icon {
       color: red;
     }
+    
+    #time-log-table tbody tr[style="background-color: gray;"] {
+      background-color: gray;
+    }
+
+
   </style>
 </body>
 </html>
