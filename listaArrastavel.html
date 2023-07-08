@@ -149,7 +149,7 @@
         tempo = `${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)}`;
         tempoCell.textContent = tempo;
         tempoCell.dataset.time = tempo;
-        document.title = tempo; // Atualiza o título da aba com o tempo
+        document.title = "TikTimeTask | "+tempo; // Atualiza o título da aba com o tempo
       }, 1000);
 
       // Armazena o intervalId para poder parar o contador posteriormente
