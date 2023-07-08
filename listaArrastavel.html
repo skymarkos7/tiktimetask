@@ -36,7 +36,7 @@
             <i class="fa fa-play play-icon" onclick="startTimer(this)"></i>
           </td>
           <td ondblclick="editarDescricao(this)">Descrição 1</td>
-          <td>00:00:00</td>
+          <td data-time="00:00:00">00:00:00</td>
         </tr>
         <tr>
           <td class="drag-handle">&#9776;</td>
@@ -44,7 +44,7 @@
             <i class="fa fa-play play-icon" onclick="startTimer(this)"></i>
           </td>
           <td ondblclick="editarDescricao(this)">Descrição 2</td>
-          <td>00:00:00</td>
+          <td data-time="00:00:00">00:00:00</td>
         </tr>
       </tbody>
     </table>
@@ -112,15 +112,14 @@
         newRow.appendChild(acaoCell);
 
         const descricaoCell = document.createElement('td');
-          // descricaoCell.contentEditable = true; // Adiciona a propriedade contentEditable para tornar a célula editável
-          descricaoCell.addEventListener("dblclick", function() {
-            editarDescricao(this);
-          });
-
+        descricaoCell.addEventListener("dblclick", function() {
+          editarDescricao(this);
+        });
         descricaoCell.textContent = descricao;
         newRow.appendChild(descricaoCell);
 
         const tempoCell = document.createElement('td');
+        tempoCell.dataset.time = '00:00:00';
         tempoCell.textContent = '00:00:00';
         newRow.appendChild(tempoCell);
 
@@ -131,7 +130,7 @@
     function startTimer(icon) {
       const row = icon.parentNode.parentNode;
       const tempoCell = row.cells[3];
-      let tempo = tempoCell.innerText;
+      let tempo = tempoCell.dataset.time;
       let [hours, minutes, seconds] = tempo.split(':');
       hours = parseInt(hours);
       minutes = parseInt(minutes);
@@ -148,7 +147,9 @@
           }
         }
         tempo = `${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)}`;
-        tempoCell.innerText = tempo;
+        tempoCell.textContent = tempo;
+        tempoCell.dataset.time = tempo;
+        document.title = tempo; // Atualiza o título da aba com o tempo
       }, 1000);
 
       // Armazena o intervalId para poder parar o contador posteriormente
@@ -167,66 +168,66 @@
       };
     }
 
-   function pauseTimer(icon) {
-  const row = icon.parentNode.parentNode;
-  const intervalId = parseInt(row.dataset.intervalId);
+    function pauseTimer(icon) {
+      const row = icon.parentNode.parentNode;
+      const intervalId = parseInt(row.dataset.intervalId);
 
-  clearInterval(intervalId);
+      clearInterval(intervalId);
 
-  // Armazena a hora de fim
-  row.dataset.endTime = getCurrentTime();
+      // Armazena a hora de fim
+      row.dataset.endTime = getCurrentTime();
 
-  // Preencher o horário de fim e calcular SGP e Total
-  const startTime = row.dataset.startTime;
-  const endTime = row.dataset.endTime;
+      // Preencher o horário de fim e calcular SGP e Total
+      const startTime = row.dataset.startTime;
+      const endTime = row.dataset.endTime;
 
-  const sgp = calculateSGP(startTime, endTime);
-  const total = calculateTotal(startTime, endTime);
+      const sgp = calculateSGP(startTime, endTime);
+      const total = calculateTotal(startTime, endTime);
 
-  const currentDate = getCurrentDate();
-  const currentStartTime = getCurrentTime();
+      const currentDate = getCurrentDate();
+      const currentStartTime = getCurrentTime();
 
-  const timeLogRow = document.createElement('tr');
-  const timeLogBody = document.getElementById('time-log-body');
-  timeLogBody.insertBefore(timeLogRow, timeLogBody.firstChild); // Adiciona a nova linha no topo
+      const timeLogRow = document.createElement('tr');
+      const timeLogBody = document.getElementById('time-log-body');
+      timeLogBody.insertBefore(timeLogRow, timeLogBody.firstChild); // Adiciona a nova linha no topo
 
-  const dateLogCell = document.createElement('td');
-  dateLogCell.textContent = currentDate;
-  timeLogRow.appendChild(dateLogCell);
+      const dateLogCell = document.createElement('td');
+      dateLogCell.textContent = currentDate;
+      timeLogRow.appendChild(dateLogCell);
 
-  const descricaoLogCell = document.createElement('td');
-  descricaoLogCell.textContent = row.cells[2].textContent;
-  timeLogRow.appendChild(descricaoLogCell);
+      const descricaoLogCell = document.createElement('td');
+      descricaoLogCell.textContent = row.cells[2].textContent;
+      timeLogRow.appendChild(descricaoLogCell);
 
-  const startLogCell = document.createElement('td');
-  startLogCell.textContent = currentStartTime;
-  timeLogRow.appendChild(startLogCell);
+      const startLogCell = document.createElement('td');
+      startLogCell.textContent = currentStartTime;
+      timeLogRow.appendChild(startLogCell);
 
-  const endLogCell = document.createElement('td');
-  endLogCell.textContent = endTime;
-  timeLogRow.appendChild(endLogCell);
+      const endLogCell = document.createElement('td');
+      endLogCell.textContent = endTime;
+      timeLogRow.appendChild(endLogCell);
 
-  const sgpLogCell = document.createElement('td');
-  if (parseFloat(sgp) <= 0.0) {
-    sgpLogCell.textContent = sgp;
-    sgpLogCell.setAttribute('title', 'Quantidade de tempo irrelevante para esse itém');
-  } else {
-    sgpLogCell.textContent = sgp;
-  }
-  timeLogRow.appendChild(sgpLogCell);
+      const sgpLogCell = document.createElement('td');
+      if (parseFloat(sgp) <=0.0) {
+        sgpLogCell.textContent = sgp;
+        sgpLogCell.setAttribute('title', 'Quantidade de tempo irrelevante para esse itém');
+      } else {
+        sgpLogCell.textContent = sgp;
+      }
+      timeLogRow.appendChild(sgpLogCell);
 
-  const totalLogCell = document.createElement('td');
-  totalLogCell.textContent = total;
-  timeLogRow.appendChild(totalLogCell);
+      const totalLogCell = document.createElement('td');
+      totalLogCell.textContent = total;
+      timeLogRow.appendChild(totalLogCell);
 
-  // Altera o ícone para o ícone de play
-  icon.classList.remove('fa-pause');
-  icon.classList.remove('pause-icon');
-  icon.classList.add('fa-play', 'play-icon');
-  icon.onclick = function () {
-    startTimer(this);
-  };
-}
+      // Altera o ícone para o ícone de play
+      icon.classList.remove('fa-pause');
+      icon.classList.remove('pause-icon');
+      icon.classList.add('fa-play', 'play-icon');
+      icon.onclick = function () {
+        startTimer(this);
+      };
+    }
 
 
     function padZero(num) {
@@ -296,22 +297,22 @@
     }
     
     function toggleDarkMode() {
-    const body = document.body;
-    body.classList.toggle("dark-mode");
-  }
+      const body = document.body;
+      body.classList.toggle("dark-mode");
+    }
 
-  const darkModeButton = document.createElement("button");
-  darkModeButton.textContent = "Modo Escuro";
-  darkModeButton.onclick = toggleDarkMode;
-  darkModeButton.style.position = "fixed";
-  darkModeButton.style.top = "10px";
-  darkModeButton.style.right = "10px";
-  darkModeButton.style.zIndex = "9999";
-  document.body.appendChild(darkModeButton);
+    const darkModeButton = document.createElement("button");
+    darkModeButton.textContent = "Modo Escuro";
+    darkModeButton.onclick = toggleDarkMode;
+    darkModeButton.style.position = "fixed";
+    darkModeButton.style.top = "10px";
+    darkModeButton.style.right = "10px";
+    darkModeButton.style.zIndex = "9999";
+    document.body.appendChild(darkModeButton);
 
-  </script>
+    </script>
 
-  <style>
+    <style>
     .container {
       max-width: 500px;
       margin: 0 auto;
@@ -355,7 +356,7 @@
     .pause-icon {
       color: red;
     }
-    
+
     body.dark-mode {
       background-color: #222;
       color: #fff;
