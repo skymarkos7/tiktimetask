@@ -112,7 +112,10 @@
         newRow.appendChild(acaoCell);
 
         const descricaoCell = document.createElement('td');
-        descricaoCell.contentEditable = true; // Adiciona a propriedade contentEditable para tornar a célula editável
+        // descricaoCell.contentEditable = true; // Adiciona a propriedade contentEditable para tornar a célula editável
+        descricaoCell.addEventListener("dblclick", function() {
+          this.contentEditable = true;
+        });
         descricaoCell.textContent = descricao;
         newRow.appendChild(descricaoCell);
 
