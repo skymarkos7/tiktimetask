@@ -293,6 +293,21 @@
       const [hours, minutes, seconds] = time.split(':');
       return parseInt(hours) * 3600 + parseInt(minutes) * 60 + parseInt(seconds);
     }
+    
+    function toggleDarkMode() {
+    const body = document.body;
+    body.classList.toggle("dark-mode");
+  }
+
+  const darkModeButton = document.createElement("button");
+  darkModeButton.textContent = "Modo Escuro";
+  darkModeButton.onclick = toggleDarkMode;
+  darkModeButton.style.position = "fixed";
+  darkModeButton.style.top = "10px";
+  darkModeButton.style.right = "10px";
+  darkModeButton.style.zIndex = "9999";
+  document.body.appendChild(darkModeButton);
+
   </script>
 
   <style>
@@ -337,6 +352,24 @@
     }
 
     .pause-icon {
+      color: red;
+    }
+    
+    body.dark-mode {
+      background-color: #222;
+      color: #fff;
+    }
+
+    body.dark-mode th,
+    body.dark-mode td {
+      border-color: #666;
+    }
+
+    .dark-mode .play-icon {
+      color: green;
+    }
+
+    .dark-mode .pause-icon {
       color: red;
     }
   </style>
