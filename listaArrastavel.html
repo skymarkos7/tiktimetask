@@ -166,6 +166,28 @@
         pauseTimer(this);
       };
     }
+    
+    
+    timerInterval = setInterval(() => {
+    if (document.hidden) {
+      return; // Se a aba estiver oculta, não atualize o tempo
+    }
+
+    seconds++;
+    if (seconds === 60) {
+      seconds = 0;
+      minutes++;
+      if (minutes === 60) {
+        minutes = 0;
+        hours++;
+      }
+    }
+
+    tempo = `${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)}`;
+    tempoCell.innerText = tempo;
+  }, 1000);
+  
+  
 
    function pauseTimer(icon) {
   const row = icon.parentNode.parentNode;
@@ -218,6 +240,8 @@
   const totalLogCell = document.createElement('td');
   totalLogCell.textContent = total;
   timeLogRow.appendChild(totalLogCell);
+  
+  clearInterval(timerInterval); // Limpar intervalo do timer
 
   // Altera o ícone para o ícone de play
   icon.classList.remove('fa-pause');
