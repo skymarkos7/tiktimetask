@@ -13,8 +13,6 @@
   />
 </head>
 <body>
-  <h2 onclick="openModal()">Abrir Modal</h2>
-
   <img id="myImg" src="tb_hr.jpeg" alt="tabela de conversão de horas - Oficial" style="width:100%;max-width:300px">
   <div id="myModal" class="modal">
     <span class="close" onclick="closeModal()">&times;</span>
@@ -221,9 +219,11 @@
       if (parseFloat(sgp) <=0.0) {
         sgpLogCell.textContent = sgp;
         sgpLogCell.setAttribute('title', 'Quantidade de tempo irrelevante para esse itém');
+        sgpLogCell.addEventListener('click', openModal);
       } else {
         sgpLogCell.textContent = sgp;
         sgpLogCell.setAttribute('title', 'Clique para obter a tabela de conversão - valores arredondados');
+        sgpLogCell.addEventListener('click', openModal);
       }
       timeLogRow.appendChild(sgpLogCell);
 
