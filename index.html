@@ -1,22 +1,14 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <link rel="icon" type="image/x-icon" href="img/ttt.png">
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/sortablejs@1.10.2/Sortable.min.css"
-  />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sortablejs@1.10.2/Sortable.min.css" />
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.10.2/Sortable.min.js"></script>
-  
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"
-  />
-  <link
-    rel="stylesheet"
-    href="style/main.css"
-  />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="style/main.css" />
 </head>
+
 <body>
   <img id="myImg" src="img/tb_hr.jpeg" alt="tabela de conversão de horas - Oficial" style="width:100%;max-width:300px">
   <div id="myModal" class="modal">
@@ -24,14 +16,11 @@
     <img class="modal-content" id="img01">
     <div id="caption"></div>
   </div>
-
   <div class="div-centralizada">
     <input type="text" id="input-descricao" placeholder="Digite a descrição" onkeydown="handleInputKeydown(event)" />
     <button class="margin" onclick="adicionarItem()">Adicionar</button>
   </div>
-
   <hr class="margin">
-
   <div class="container">
     <table id="sortable-table">
       <thead>
@@ -62,13 +51,10 @@
       </tbody>
     </table>
   </div>
-
   <hr class="margin">
-
   <h4 class="div-centralizada">
     Histórico de tempo
   </h4>
-
   <div class="container">
     <table id="time-log-table">
       <thead>
@@ -87,4 +73,5 @@
   </div>
 </body>
 <script src="script/main.js"></script>
+
 </html>
