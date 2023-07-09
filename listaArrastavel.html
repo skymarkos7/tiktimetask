@@ -214,6 +214,7 @@
         sgpLogCell.setAttribute('title', 'Quantidade de tempo irrelevante para esse itém');
       } else {
         sgpLogCell.textContent = sgp;
+        sgpLogCell.setAttribute('title', 'Clique para obter a tabela de conversão - valores arredondados');
       }
       timeLogRow.appendChild(sgpLogCell);
 
@@ -410,6 +411,10 @@ document.addEventListener('click', function (event) {
     }
 
     #sortable-table tbody td:nth-child(4) {
+      cursor: pointer;
+    }
+
+    #time-log-table tbody td:nth-child(5) {
       cursor: pointer;
     }
 
