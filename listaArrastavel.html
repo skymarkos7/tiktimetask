@@ -341,6 +341,11 @@
       modal.style.display = "none";
       openModalText.style.display = "inline";
     }
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') closeModal();
+    });
+
     
     //------------------------------
   
