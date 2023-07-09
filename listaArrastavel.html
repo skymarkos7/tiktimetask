@@ -13,6 +13,15 @@
   />
 </head>
 <body>
+  <h2 onclick="openModal()">Abrir Modal</h2>
+
+  <img id="myImg" src="https://media.licdn.com/dms/image/C560BAQHMnA03XDdf3w/company-logo_200_200/0/1519855918965?e=2147483647&v=beta&t=J3kUMZwIphc90TFKH5oOO9Sa9K59fimgJf-s_okU3zs" alt="Snow" style="width:100%;max-width:300px">
+  <div id="myModal" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="img01">
+    <div id="caption"></div>
+  </div>
+
   <div class="div-centralizada">
     <input type="text" id="input-descricao" placeholder="Digite a descrição" onkeydown="handleInputKeydown(event)" />
     <button class="margin" onclick="adicionarItem()">Adicionar</button>
@@ -312,31 +321,50 @@
     darkModeButton.style.zIndex = "9999";
     document.body.appendChild(darkModeButton);
     
+    //-----------  MODAL ----------------
+    function openModal() {
+      var modal = document.getElementById("myModal");
+      var modalImg = document.getElementById("img01");
+      var captionText = document.getElementById("caption");
+      var openModalText = document.getElementById("openModalText");
+
+      modal.style.display = "block";
+      modalImg.src = document.getElementById("myImg").src;
+      captionText.innerHTML = document.getElementById("myImg").alt;
+      openModalText.style.display = "none";
+    }
+
+    function closeModal() {
+      var modal = document.getElementById("myModal");
+      var openModalText = document.getElementById("openModalText");
+
+      modal.style.display = "none";
+      openModalText.style.display = "inline";
+    }
     
-    
-  //------------------------------
+    //------------------------------
   
   function highlightMatchingItems() {
   const tableBody = document.getElementById('table-body');
   const timeLogBody = document.getElementById('time-log-body');
   const descricaoClicada = event.target.parentNode.querySelector('td:nth-child(3)').textContent;
 
-  for (let i = 0; i < timeLogBody.rows.length; i++) {
-    const descricaoCell = timeLogBody.rows[i].querySelector('td:nth-child(2)');
-    const descricao = descricaoCell.textContent;
+    for (let i = 0; i < timeLogBody.rows.length; i++) {
+      const descricaoCell = timeLogBody.rows[i].querySelector('td:nth-child(2)');
+      const descricao = descricaoCell.textContent;
 
-    if (descricao === descricaoClicada) {
-      timeLogBody.rows[i].style.backgroundColor = 'gray';
-    } else {
-      timeLogBody.rows[i].style.backgroundColor = '';
+      if (descricao === descricaoClicada) {
+        timeLogBody.rows[i].style.backgroundColor = 'gray';
+      } else {
+        timeLogBody.rows[i].style.backgroundColor = '';
+      }
     }
-  }
 }
 
-document.addEventListener('click', function (event) {
-  if (event.target.matches('#table-body td:nth-child(4)')) {
-    highlightMatchingItems();
-  }
+  document.addEventListener('click', function (event) {
+    if (event.target.matches('#table-body td:nth-child(4)')) {
+      highlightMatchingItems();
+    }
 });
 
 
@@ -416,6 +444,91 @@ document.addEventListener('click', function (event) {
 
     #time-log-table tbody td:nth-child(5) {
       cursor: pointer;
+    }
+
+    /* 
+    *   Modal com tabela de conversão
+    */
+
+    #myImg {
+      display: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    #myImg:hover {
+      opacity: 0.7;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      padding-top: 100px;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgb(0, 0, 0);
+      background-color: rgba(0, 0, 0, 0.9);
+    }
+
+    .modal-content {
+      margin: auto;
+      display: block;
+      width: 80%;
+      max-width: 700px;
+    }
+
+    #caption {
+      margin: auto;
+      display: block;
+      width: 80%;
+      max-width: 700px;
+      text-align: center;
+      color: #ccc;
+      padding: 10px 0;
+      height: 150px;
+    }
+
+    .modal-content,
+    #caption {
+      animation-name: zoom;
+      animation-duration: 0.6s;
+    }
+
+    @keyframes zoom {
+      from {
+        transform: scale(0);
+      }
+      to {
+        transform: scale(1);
+      }
+    }
+
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 35px;
+      color: #f1f1f1;
+      font-size: 40px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: #bbb;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    @media only screen and (max-width: 700px) {
+      .modal-content {
+        width: 100%;
+      }
     }
 
 
