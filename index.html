@@ -74,61 +74,22 @@
 </body>
 
 <script>
-function tempoFocus(timeInit) {
-  function handleVisibilityChange() {
-    isTabFocused = !document.hidden;
-    if (isTabFocused) {
-      const primeiraTabela = document.querySelector("#sortable-table tbody tr:first-child");
-      const tempoCell = primeiraTabela.querySelector("td[data-time]");
-      const tempoInicial = tempoCell.dataset.time; // Tempo inicial do contador
-      const tempoAtual = getCurrentTime(); // Tempo atual de voltar o foco para a aba
+  // let isTabFocused = true;
 
-      const diffTempo = diffTempoEmSegundos(tempoInicial, tempoAtual); // Diferença de tempo em segundos
+// function handleVisibilityChange() {
+//   isTabFocused = !document.hidden;
 
-      const tempoAtualizado = somaTempo(tempoInicial, diffTempo); // Tempo atualizado
+//   if (isTabFocused) {
+//     alert("A aba está focada");
+//     // Execute as ações necessárias quando a aba estiver focada
+//   } else {
+//     // alert("A aba não está focada");
+//     // Execute as ações necessárias quando a aba não estiver focada
+//   }
+// }
 
-      tempoCell.textContent = tempoAtualizado;
-      document.title = "TikTimeTask | " + tempoAtualizado; // Atualizar o título da aba com o tempo atualizado
-    }
+// document.addEventListener("visibilitychange", handleVisibilityChange);
 
-  }
-  document.addEventListener("visibilitychange", handleVisibilityChange);
-}
-
-
-// Obtém o tempo atual no formato "HH:mm:ss"
-function getCurrentTime() {
-  const date = new Date();
-  const hours = padZero(date.getHours());
-  const minutes = padZero(date.getMinutes());
-  const seconds = padZero(date.getSeconds());
-  return `${hours}:${minutes}:${seconds}`;
-}
-
-// Calcula a diferença de tempo em segundos entre dois tempos no formato "HH:mm:ss"
-function diffTempoEmSegundos(tempo1, tempo2) {
-  const [horas1, minutos1, segundos1] = tempo1.split(":").map(Number);
-  const [horas2, minutos2, segundos2] = tempo2.split(":").map(Number);
-
-  const totalSegundos1 = horas1 * 3600 + minutos1 * 60 + segundos1;
-  const totalSegundos2 = horas2 * 3600 + minutos2 * 60 + segundos2;
-
-  return totalSegundos2 - totalSegundos1;
-}
-
-// Soma um tempo no formato "HH:mm:ss" com uma quantidade de segundos
-function somaTempo(tempo, segundos) {
-  const [horas, minutos, segundosAtual] = tempo.split(":").map(Number);
-
-  let totalSegundos = horas * 3600 + minutos * 60 + segundosAtual;
-  totalSegundos += segundos;
-
-  const novoHoras = Math.floor(totalSegundos / 3600);
-  const novoMinutos = Math.floor((totalSegundos % 3600) / 60);
-  const novoSegundos = totalSegundos % 60;
-
-  return `${padZero(novoHoras)}:${padZero(novoMinutos)}:${padZero(novoSegundos)}`;
-}
 
 
 
@@ -207,7 +168,6 @@ function startTimer(icon) {
       }
     }
     tempo = `${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)}`;
-   
     tempoCell.textContent = tempo;
     tempoCell.dataset.time = tempo;
     document.title = "TikTimeTask | " + tempo; // Atualiza o título da aba com o tempo
@@ -219,8 +179,6 @@ function startTimer(icon) {
   // Armazena a data e a hora de início
   row.dataset.startDate = getCurrentDate();
   row.dataset.startTime = getCurrentTime();
-
-  // tempoFocus(row.dataset.startTime);
 
   // Altera o ícone para o ícone de pausa
   icon.classList.remove("fa-play");
@@ -430,7 +388,7 @@ document.addEventListener("click", function (event) {
     highlightMatchingItems();
   }
 });
-tempoFocus();
+
 </script>
 
 </html>
