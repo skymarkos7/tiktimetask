@@ -1,3 +1,24 @@
+// let isTabFocused = true;
+
+// function handleVisibilityChange() {
+//   isTabFocused = !document.hidden;
+
+//   if (isTabFocused) {
+//     alert("A aba está focada");
+//     // Execute as ações necessárias quando a aba estiver focada
+//   } else {
+//     // alert("A aba não está focada");
+//     // Execute as ações necessárias quando a aba não estiver focada
+//   }
+// }
+
+// document.addEventListener("visibilitychange", handleVisibilityChange);
+
+
+
+
+
+
 const sortableTable = Sortable.create(
   document.getElementById("sortable-table").getElementsByTagName("tbody")[0],
   {
