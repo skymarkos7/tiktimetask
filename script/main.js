@@ -214,7 +214,7 @@ function getCurrentDate() {
   const year = date.getFullYear();
   const month = padZero(date.getMonth() + 1);
   const day = padZero(date.getDate());
-  return `${year}-${month}-${day}`;
+  return `${day}-${month}-${year}`;
 }
 
 function getCurrentTime() {
@@ -236,11 +236,22 @@ function calculateSGP(startTime, endTime) {
 function calculateTotal(startTime, endTime) {
   const start = parseTime(startTime);
   const end = parseTime(endTime);
-  const duration = end - start;
+  const duration = parseInt(end - start);
+  const timeSaved = parseInt(localStorage.getItem("timeTotal"))
+  const totalTime = timeSaved > 0 ? duration+timeSaved : duration;
+  const timeFormatted = formatTime(totalTime);
+  localStorage.setItem("timeTotal", totalTime);
+
+  return timeFormatted;
+}
+
+function formatTime(duration) {
   const hours = Math.floor(duration / 3600);
   const minutes = Math.floor((duration % 3600) / 60);
   const seconds = duration % 60;
-  return `${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)}`;
+  const timeFormatted = `${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)}`;
+
+  return timeFormatted;
 }
 
 function parseTime(time) {
